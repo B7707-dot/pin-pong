@@ -1,4 +1,5 @@
 from pygame import *
+font.init()
 
 class GameSprite(sprite.Sprite):
     def __init__(self,f_name = 'rocket.png',speed = 5,x = 350,y = 400,x_size =50,y_size = 80):
@@ -30,7 +31,7 @@ class Platform(GameSprite):
         if key_p[K_s] and self.rect.y <= 500:
             self.rect.y+=self.speed
 class Ball(GameSprite):
-    def __init__(self,f_name = 'ball.png',speed = 5,x = 250, y = 250, x_size = 50,y_size = 50):
+    def __init__(self,f_name = 'ball.png',speed = 8,x = 250, y = 250, x_size = 50,y_size = 50):
         super().__init__(f_name,speed,x,y,x_size,y_size)
         self.speedx = speed
         self.speedy = speed
@@ -47,28 +48,35 @@ class Ball(GameSprite):
         if self.rect.y == 490 or self.rect.y == 10:
             self.speedy *=-1
 
-        
+
         
 
 
 platforma_1 = Platform(f_name = 'rectsd.png',speed = 7, x = 50, y = 250, x_size = 40, y_size = 150)
-platforma_2 = Platform(f_name = 'rectsd.png',speed = 7, x = 350, y = 250, x_size = 40, y_size = 150)
+platforma_2 = Platform(f_name = 'rectsd.png',speed = 7, x = 600, y = 250, x_size = 40, y_size = 150)
 ball = Ball()
 
 
 schet_1 = 0
 schet_2 = 0 
 
-window = display.set_mode((500,500))
+window = display.set_mode((700,500))
 display.set_caption('Пин понг')
 game = True 
 finish = False
 fps = 60
 clock = time.Clock()
-back = transform.scale(image.load('пляж.jpg'),(500,500))
 font_1 = font.SysFont('Times New Roman',70)
+text = 'Player 1 won'
+text_2 = 'Player 2 won'
+won_1 = font_1.render(text,True,(0,0,0))
+won_2 = font_1.render(text_2,True,(0,0,0))
+back = transform.scale(image.load('пляж.jpg'),(700,500))
 scorer_1 = font_1.render(str(schet_1),True,(0,0,0))
 scorer_2 = font_1.render(str(schet_2),True,(0,0,0))
+
+count = 0
+
 window.blit(scorer_1,(50,50))
 window.blit(scorer_2,(600,50))
 window.blit(back,(0,0))
@@ -93,13 +101,31 @@ while game:
             ball.speedx*=-1
             schet_1+=1
             scorer_1 = font_1.render(str(schet_1),True,(0,0,0))
+            if schet_1 == 3:
+                finish = True
 
         elif ball.rect.x<=10:
             ball.restart(250,250)
             ball.speedx*=-1
             schet_2+=1
             scorer_2 = font_1.render(str(schet_2),True,(0,0,0))
+            if schet_2 == 3:
+                finish = True
+    if finish == True:
+        count += 1
+        if schet_1 == 3:
+            window.blit(won_1,(200,250))
+        if schet_2 == 3:
+            window.blit(won_2,(200,250))
+        if count == 300:
+            finish = False
+            count = 0 
+            schet_1 = 0
+            schet_2 = 0
+            scorer_1 = font_1.render(str(schet_1),True,(0,0,0))
+            scorer_2 = font_1.render(str(schet_2),True,(0,0,0))
 
+        
         
 
 
@@ -107,6 +133,5 @@ while game:
 
     
     display.update()
-
 
 display.update()
