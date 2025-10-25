@@ -1,4 +1,5 @@
 from pygame import *
+from random import *
 font.init()
 
 class GameSprite(sprite.Sprite):
@@ -41,12 +42,17 @@ class Ball(GameSprite):
         self.rect.y +=self.speedy
         if sprite.collide_rect(self,platforma_1) == True:
             self.speedx*=-1
+            a_s = abs(self.speedx)
+            self.speedx = randint(2,9)*self.speedx//a_s
             self.rect.x += self.speed
         elif sprite.collide_rect(self,platforma_2) == True:
             self.speedx*=-1
             self.rect.x -= self.speed
-        if self.rect.y == 490 or self.rect.y == 10:
+        if self.rect.y >= 490 or self.rect.y <= 10:
             self.speedy *=-1
+            b_s = abs(self.speedy)
+            self.rect.y +=self.speedy
+            self.speedy = randint(2,9)*self.speedy//b_s
 
 
         
